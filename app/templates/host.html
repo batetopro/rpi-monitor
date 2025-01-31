@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block app_content %}
+    <div id="host-info">
+        <h4>Loading ...</h4>
+    </div>
+
+    {% raw %}
+    <script type="template/handlebars" id="host-info-template">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-motherboard"></i>
+                            Host Info
+                        </h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" id="host-info-refresh">
+                                <i class="bi bi-arrow-clockwise"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table">
+                            <tr>
+                                <th>Hostname</th>
+                                <td>{{ hostname }}</td>
+                            </tr>
+                            <tr>
+                                <th>Model</th>
+                                <td>{{ model }}</td>
+                            </tr>
+                            <tr>
+                                <th>OS</th>
+                                <td>{{ platform.pretty_name }}</td>
+                            </tr>
+                            <tr>
+                                <th>System</th>
+                                <td>{{ platform.system }}</td>
+                            </tr>
+                            <tr>
+                                <th>Machine</th>
+                                <td>{{ platform.machine }}</td>
+                            </tr>
+                            <tr>
+                                <th>Processor</th>
+                                <td>{{ platform.processor }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-footer">
+                        Un-check auto refresh
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-cpu"></i>
+                            Resources
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center"><strong>CPU</strong></p>
+                        <div class="progress-group">
+                          Usage
+                          <span class="float-end"><b>{{ cpu.usage }}</b>/100 %</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ cpu.usage_progressbar }}" style="width: {{ cpu.usage }}%"></div>
+                          </div>
+                        </div>
+                        <div class="progress-group">
+                          Frequency
+                          <span class="float-end"><b>{{ cpu.frequency }}</b>/{{ cpu.max_frequency }} GHz</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar text-bg-primary" style="width: {{ cpu.frequency_percent }}%"></div>
+                          </div>
+                        </div>
+                        <div class="progress-group">
+                          Temperature
+                          <span class="float-end"><b>{{ cpu.temperature }}</b> C</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar text-bg-primary {{ cpu.temperature_progressbar }}" style="width: {{ cpu.temperature }}%" aria-valuenow="{{ cpu.temperature }}" aria-valuemin="0" aria-valuemax="100" ></div>
+                          </div>
+                        </div>
+                        <p class="text-center"><strong>RAM</strong></p>
+                        <div class="progress-group">
+                          Usage
+                          <span class="float-end"><b>{{ ram.used }}</b>/{{ ram.total }} MB</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ ram.progressbar }}" style="width: {{ ram.used_percent }}%"></div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                Current date: <strong>{{ current_date }}</strong>
+                <br>
+                Uptime: <strong>{{uptime.since}}</strong> - <strong>{{uptime.for}}</strong>
+            </div>
+        </div>
+    </script>
+    {% endraw %}
+
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/handlebars.min.js') }}"></script>
+
+
+<script type="text/javascript">
+    var template = Handlebars.compile($("#host-info-template").html()),
+        refresh_timeout = undefined;
+
+    function show_host_info(){
+        $.getJSON('/host/info/', {}, function(resp){
+            resp.cpu.frequency_percent = (resp.cpu.frequency / resp.cpu.max_frequency) * 100;
+
+            if (resp.cpu.usage >= 85){
+                resp.cpu.usage_progressbar = 'text-bg-danger';
+            } else if (resp.cpu.usage >= 70){
+                resp.cpu.usage_progressbar = 'text-bg-warning';
+            } else {
+                resp.cpu.usage_progressbar = 'text-bg-success';
+            }
+
+            if (resp.cpu.temperature >= 85){
+                resp.cpu.temperature_progressbar = 'text-bg-danger';
+            } else if (resp.cpu.temperature >= 70){
+                resp.cpu.temperature_progressbar = 'text-bg-warning';
+            } else {
+                resp.cpu.temperature_progressbar = 'text-bg-success';
+            }
+
+            if (resp.ram.used_percent >= 85){
+                resp.ram.progressbar = 'text-bg-danger';
+            } else if (resp.ram.used_percent >= 70){
+                resp.ram.progressbar = 'text-bg-warning';
+            } else {
+                resp.ram.progressbar = 'text-bg-success';
+            }
+
+            $("#host-info").html(
+                template(resp)
+            );
+
+            $('#host-info-refresh').on('click', function(){
+                show_host_info();
+            });
+
+            refresh_timeout = setTimeout(function(){
+                show_host_info();
+            }, 5000);
+        });
+    }
+
+
+    $(function(){
+        show_host_info();
+    })
+</script>
+{% endblock %}
