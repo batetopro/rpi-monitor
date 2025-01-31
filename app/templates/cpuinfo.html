@@ -1,1 +1,25 @@
 {% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">&gt;&gt; cat /proc/cpuinfo</h4>
+    </div>
+    <div>
+        <pre id="cpu-info">Loading ...</pre>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+
+<script type="text/javascript">
+    $.get('/cpu/info/', {}, function(resp){
+        $('#cpu-info').html(resp)
+    })
+
+</script>
+
+{% endblock %}

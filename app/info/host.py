@@ -14,6 +14,12 @@ class HostInfo:
         return self._cpu_frequency
 
     @property
+    def cpu_idle(self):
+        if self._cpu_idle is None:
+            self._cpu_idle = self.read_cpu_idle()
+        return self._cpu_idle
+
+    @property
     def cpu_max_frequency(self):
         if self._cpu_max_frequency is None:
             self._cpu_max_frequency = self.read_cpu_max_frequency()
@@ -79,6 +85,7 @@ class HostInfo:
 
     def __init__(self):
         self._cpu_frequency = None
+        self._cpu_idle = None
         self._cpu_temp = None
         self._cpu_max_frequency = None
         self._cpu_usage_percent = None
@@ -102,6 +109,15 @@ class HostInfo:
             / 1000000,
             2,
         )    
+    
+    def read_cpu_idle(self):
+        return 100 - round(
+            float(
+                os.popen(
+                    "/bin/grep 'cpu ' /proc/stat | /usr/bin/awk '{usage=(($2+$4)*100)/($2+$4+$5)} END {print usage}'"
+                ).read()
+            )
+        )
 
     def read_cpu_max_frequency(self):
         return round(
@@ -127,16 +143,6 @@ class HostInfo:
         stdout, stderr = process.communicate()
 
         return round(float(stdout.decode()))
-
-        '''
-        return round(
-            float(
-                os.popen(
-                    "/bin/grep 'cpu ' /proc/stat | /usr/bin/awk '{usage=(($2+$4)*100)/($2+$4+$5)} END {print usage}'"
-                ).read()
-            )
-        )
-        '''
 
     def read_current_date(self):
         return os.popen('date').read().strip()

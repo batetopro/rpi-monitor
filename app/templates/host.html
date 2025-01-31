@@ -96,9 +96,13 @@
                 </div>
             </div>
             <div class="col-md-12">
-                Current date: <strong>{{ current_date }}</strong>
-                <br>
-                Uptime: <strong>{{uptime.since}}</strong> - <strong>{{uptime.for}}</strong>
+                <p>
+                    Current date: <strong>{{ current_date }}</strong>
+                    <br />
+                    Uptime: <strong>{{uptime.since}}</strong> - <strong>{{uptime.for}}</strong>
+                    <br />
+                    CPU idle: <strong>{{uptime.idle}}%</strong>
+                </p>
             </div>
         </div>
     </script>

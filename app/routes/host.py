@@ -39,6 +39,7 @@ def host_info():
         'uptime': {
             'for': info.up_for,
             'since': info.up_since,
+            'idle': info.cpu_idle,
         },
         'platform': {
             'system': platform['system'],
