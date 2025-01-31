@@ -1,16 +1,19 @@
+import os
+
+
 from flask import render_template
 
 
 from app import app, auth
 
 
-@app.route('/network/ifconfig/')
-@auth.login_required
-def ifconfig():
-    return render_template('ifconfig.html', title='ifconfig', current_page='ifconfig')    
-
-
-@app.route('/network/ipa/')
+@app.route('/ipa/')
 @auth.login_required
 def ipa():
-    return render_template('ipa.html', title='ip -a', current_page='ipa')    
+    return render_template('ipa.html', title='NICs', current_page='ipa')    
+
+
+@app.route('/ipa/info/')
+@auth.login_required
+def ipa_info():
+    return os.popen('ip a').read()

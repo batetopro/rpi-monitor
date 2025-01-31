@@ -1,1 +1,36 @@
 {% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">&gt;&gt; service --status-all</h4>
+    </div>
+    <div class="card-body" id="systemctl-view">
+        <h3>Loading ...</h3>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+
+<script type="text/javascript">
+    $.getJSON('/systemctl/info/', {}, function(resp){
+        var view = '<table class="table"><tr><th>Service</th><th>Status</th></tr>';
+        
+        for (var i = 0; i < resp.length; i++){
+            if (resp[i][0]){
+                view  += '<tr><td>' + resp[i][1] + '</td><td><span class="badge text-bg-success">Started</span></td></tr>'
+            } else {
+                view  += '<tr><td>' + resp[i][1] + '</td><td><span class="badge text-bg-danger">Stopped</span></td></tr>'
+            }
+        }
+
+        view += '</table>'
+        
+        $('#systemctl-view').html(view)
+    });
+</script>
+
+{% endblock %}

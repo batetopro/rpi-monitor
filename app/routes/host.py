@@ -1,11 +1,8 @@
-from flask import json
+from flask import json, render_template
 
 
 from app import app, auth
 from app.info.host import HostInfo
-
-
-from flask import render_template
 
 
 @app.route('/')

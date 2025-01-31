@@ -4,10 +4,10 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">&gt;&gt; cat /proc/cpuinfo</h4>
+        <h3 class="card-title">&gt;&gt; df -h</h4>
     </div>
     <div class="card-body">
-        <pre id="cpu-info">Loading ...</pre>
+        <pre id="df-info">Loading ...</pre>
     </div>
 </div>
 {% endblock %}
@@ -16,8 +16,9 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
 
 <script type="text/javascript">
-    $.get('/systemctl/info/', {}, function(resp){
-        console.log(resp);
-    })
+    $.get('/df/info/', {}, function(resp){
+        $('#df-info').text(resp)
+    });
 </script>
+
 {% endblock %}

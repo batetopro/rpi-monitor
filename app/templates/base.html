@@ -138,7 +138,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('systemctl') }}" class="nav-link">
+                    <a href="{{ url_for('process') }}" class="nav-link">
                         <i class="nav-icon bi bi-filetype-exe"></i>
                         <p>Processes</p>
                     </a>
@@ -158,20 +158,20 @@
                 </li>
                 <li class="nav-header">STORAGE</li>
                 <li class="nav-item">
-                    <a href="{{ url_for('cpuinfo') }}" class="nav-link">
+                    <a href="{{ url_for('df') }}" class="nav-link">
                         <i class="nav-icon bi bi-device-hdd"></i>
                         <p>Used space</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ url_for('cpuinfo') }}" class="nav-link">
+                    <a href="{{ url_for('lsblk') }}" class="nav-link">
                         <i class="nav-icon bi bi-usb-drive"></i>
                         <p>Devices</p>
                     </a>
                 </li>
                 <li class="nav-header">NETWORK</li>
                 <li class="nav-item">
-                    <a href="{{ url_for('cpuinfo') }}" class="nav-link">
+                    <a href="{{ url_for('ipa') }}" class="nav-link">
                         <i class="nav-icon bi bi-hdd-network"></i>
                         <p>NICs</p>
                     </a>
