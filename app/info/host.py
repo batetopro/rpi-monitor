@@ -1,5 +1,6 @@
 import os
 import platform
+import re
 import subprocess
 
 
@@ -42,6 +43,22 @@ class HostInfo:
         return self.read_current_date()
 
     @property
+    def disk_space_available(self):
+        if self._disk_space_available is None:
+            self.read_disk_space()
+        return self._disk_space_available
+    
+    @property
+    def disk_space_total(self):
+        return self.disk_space_available + self.disk_space_used
+
+    @property
+    def disk_space_used(self):
+        if self._disk_space_used is None:
+            self.read_disk_space()
+        return self._disk_space_used
+
+    @property
     def hostname(self):
         if self._hostname is None:
             self._hostname = self.read_hostname()
@@ -52,6 +69,12 @@ class HostInfo:
         if self._model is None:
             self._model = self.read_model()
         return self._model
+
+    @property
+    def number_of_cpus(self):
+        if self._number_of_cpus is None:
+            self._number_of_cpus = self.read_number_of_cpus()
+        return self._number_of_cpus
 
     @property
     def ram_free(self):
@@ -90,10 +113,14 @@ class HostInfo:
         self._cpu_max_frequency = None
         self._cpu_usage_percent = None
 
+        self._disk_space_available = None
+        self._disk_space_used = None
+
         self._hostname = None
 
         self._model = None
-
+        self._number_of_cpus = None
+    
         self._ram_free = None
         self._ram_total = None
 
@@ -145,7 +172,26 @@ class HostInfo:
         return round(float(stdout.decode()))
 
     def read_current_date(self):
-        return os.popen('date').read().strip()
+        return os.popen('date +%s').read().strip()
+
+    def read_disk_space(self):
+        data = os.popen('df').read()
+        
+        available = 0
+        used = 0
+        regex = re.compile(r'\s+')
+
+        for k, line in enumerate(data.splitlines()):
+            if k == 0:
+                continue
+            line = line.strip()
+            parts = regex.split(line)
+            
+            used += int(parts[2])
+            available += int(parts[3])
+
+        self._disk_space_available = available
+        self._disk_space_used = used
 
     def read_hostname(self):
         with open("/etc/hostname", "r") as f:
@@ -154,13 +200,16 @@ class HostInfo:
     def read_model(self):
         return os.popen("/bin/cat /sys/firmware/devicetree/base/model").read().rstrip('\0').strip()
 
+    def read_number_of_cpus(self):
+        return int(os.popen('nproc').read().strip())
+
     def read_platform(self):
         info = platform.freedesktop_os_release()
 
         return {
             'system': platform.system(),
             'processor': platform.processor(),
-            'platfrom': platform.platform(),
+            'platform': platform.platform(),
             'machine': platform.machine(),
             'release': platform.release(),
             'pretty_name': info['PRETTY_NAME'],
