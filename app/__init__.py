@@ -21,4 +21,4 @@ def verify_password(username, password):
 app = Flask(__name__)
 
 
-from app import routes, models, commands
+from app import routes, models, commands, sidebar
