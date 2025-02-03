@@ -26,6 +26,7 @@ def host_info():
             'frequency': info.cpu_frequency,
             'max_frequency': info.cpu_max_frequency,
             'temperature': info.cpu_temp,
+            'number': info.number_of_cpus,
         },
         'ram': {
             'total': info.ram_total,
@@ -43,6 +44,11 @@ def host_info():
             'processor': platform['processor'],
             'machine': platform['machine'],
             'pretty_name': platform['pretty_name'],
+        },
+        'disk_space': {
+            'available': info.disk_space_available,
+            'used': info.disk_space_used,
+            'total':  info.disk_space_total,
         }
     }
    

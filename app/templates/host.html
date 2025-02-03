@@ -46,6 +46,10 @@
                                 <th>Processor</th>
                                 <td>{{ platform.processor }}</td>
                             </tr>
+                            <tr>
+                                <th>Number of CPUs</th>
+                                <td>{{ cpu.number }}</td>
+                            </tr>
                         </table>
                     </div>
                     <div class="card-footer">
@@ -90,6 +94,14 @@
                           <span class="float-end"><b>{{ ram.used }}</b>/{{ ram.total }} MB</span>
                           <div class="progress progress-sm">
                             <div class="progress-bar {{ ram.progressbar }}" style="width: {{ ram.used_percent }}%"></div>
+                          </div>
+                        </div>
+                        <p class="text-center"><strong>Used disk</strong></p>
+                        <div class="progress-group">
+                          Usage
+                          <span class="float-end"><b>{{ disk_space.show_used }}</b>/{{ disk_space.show_total }} GBi</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ disk_space.progressbar }}" style="width: {{ disk_space.used_percent }}%"></div>
                           </div>
                         </div>
                     </div>
@@ -146,6 +158,18 @@
                 resp.ram.progressbar = 'text-bg-warning';
             } else {
                 resp.ram.progressbar = 'text-bg-success';
+            }
+            
+            resp.disk_space.used_percent = (resp.disk_space.used / resp.disk_space.total) * 100;
+            resp.disk_space.show_used = (resp.disk_space.used / (1024 * 1024)).toFixed(2)
+            resp.disk_space.show_total = (resp.disk_space.total / (1024 * 1024)).toFixed(2)
+
+            if (resp.ram.used_percent >= 85){
+                resp.disk_space.progressbar = 'text-bg-danger';
+            } else if (resp.ram.used_percent >= 70){
+                resp.disk_space.progressbar = 'text-bg-warning';
+            } else {
+                resp.disk_space.progressbar = 'text-bg-success';
             }
 
             $("#host-info").html(
