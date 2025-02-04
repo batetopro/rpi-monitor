@@ -21,10 +21,7 @@ def get_host():
         'machine': platform_info['machine'],
         'processor': platform_info['processor'],
         'platform': platform_info['platform'],
-        'up_since': datetime.datetime.strptime(
-            host_info.up_since,
-            '%Y-%m-%d %H:%M:%S'
-        ).timestamp(),
+        'up_since': host_info.up_since,
         'max_cpu_frequency': host_info.cpu_max_frequency,
         'total_ram': host_info.ram_total,
         'number_of_cpus': host_info.number_of_cpus,
