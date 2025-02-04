@@ -32,7 +32,7 @@ def get_host():
 
 @app.cli.command("usage")
 def get_usage():
-    host_info = HostInfo()
+    host_info = PsutilHostInfo()
 
     data = {
         'cpu_usage': host_info.cpu_usage_percent,
