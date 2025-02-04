@@ -40,10 +40,17 @@
                         </div>
                         <p class="text-center m-0"><strong>RAM</strong></p>
                         <div class="progress-group">
-                          Usage
+                          Virtual
                           <span class="float-end"><b>{{ ram.show_used }}</b>/{{ ram.show_total }} MB</span>
                           <div class="progress progress-sm">
                             <div class="progress-bar {{ ram.progressbar }}" style="width: {{ ram.used_percent }}%"></div>
+                          </div>
+                        </div>
+                        <div class="progress-group">
+                          Swap
+                          <span class="float-end"><b>{{ swap.show_used }}</b>/{{ swap.show_total }} MB</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ swap.progressbar }}" style="width: {{ swap.used_percent }}%"></div>
                           </div>
                         </div>
                         <p class="text-center m-0"><strong>Disk</strong></p>
@@ -175,21 +182,31 @@
             } else {
                 resp.ram.progressbar = 'text-bg-success';
             }
-            
+
+            resp.swap.show_used = (resp.swap.used / (1024 * 1024)).toFixed(2)
+            resp.swap.show_total = (resp.swap.total / (1024 * 1024)).toFixed(2)
+            if (resp.swap.used_percent >= 85){
+                resp.swap.progressbar = 'text-bg-danger';
+            } else if (resp.swap.used_percent >= 70){
+                resp.swap.progressbar = 'text-bg-warning';
+            } else {
+                resp.swap.progressbar = 'text-bg-success';
+            }
+
             resp.disk_space.used_percent = (resp.disk_space.used / resp.disk_space.total) * 100;
             resp.disk_space.show_used = (resp.disk_space.used / (1024 * 1024 * 1024)).toFixed(2)
             resp.disk_space.show_total = (resp.disk_space.total / (1024 * 1024 * 1024)).toFixed(2)
             resp.disk_io.read_gb = (resp.disk_io.read_bytes / (1024 * 1024 * 1024)).toFixed(2)
             resp.disk_io.write_gb = (resp.disk_io.write_bytes / (1024 * 1024 * 1024)).toFixed(2)
 
-            if (resp.ram.used_percent >= 85){
+            if (resp.disk_space.used_percent >= 85){
                 resp.disk_space.progressbar = 'text-bg-danger';
-            } else if (resp.ram.used_percent >= 70){
+            } else if (resp.disk_space.used_percent >= 70){
                 resp.disk_space.progressbar = 'text-bg-warning';
             } else {
                 resp.disk_space.progressbar = 'text-bg-success';
             }
-            
+
             resp.network.show_received = (resp.network.received / (1024 * 1024 * 1024)).toFixed(2)
             resp.network.show_transmitted = (resp.network.transmitted / (1024 * 1024 * 1024)).toFixed(2)
 

@@ -127,6 +127,28 @@ class PsutilHostInfo:
         return self.virtual_memory.percent
 
     @property
+    def swap_free(self):
+        return self.swap_memory.free
+
+    @property
+    def swap_memory(self):
+        if self._swap_memory is None:
+            self._swap_memory = psutil.swap_memory()
+        return self._swap_memory
+
+    @property
+    def swap_total(self):
+        return self.swap_memory.total
+
+    @property
+    def swap_used(self):
+        return self.swap_memory.used
+
+    @property
+    def swap_used_percent(self):
+        return self.swap_memory.percent
+
+    @property
     def up_for(self):
         return self.read_up_for()
 
@@ -154,6 +176,7 @@ class PsutilHostInfo:
         self._model = None
         self._net_io_counters = None
         self._number_of_cpus = None
+        self._swap_memory = None
         self._up_since = None
         self._virtual_memory = None
 

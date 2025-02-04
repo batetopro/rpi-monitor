@@ -29,22 +29,6 @@ def host_info():
             'temperature': info.cpu_temp,
             'number': info.number_of_cpus,
         },
-        'ram': {
-            'total': info.ram_total,
-            'free': info.ram_free,
-            'used': info.ram_used,
-            'used_percent': info.ram_used_percent,
-        },
-        'uptime': {
-            'for': info.up_for,
-            'since': info.up_since,
-        },
-        'platform': {
-            'system': platform['system'],
-            'processor': platform['processor'],
-            'machine': platform['machine'],
-            'pretty_name': platform['pretty_name'],
-        },
         'disk_io': {
             'read_bytes': info.disk_io_read_bytes,
             'write_bytes': info.disk_io_write_bytes,
@@ -57,7 +41,29 @@ def host_info():
         'network': {
             'received': info.net_io_bytes_recv,
             'transmitted': info.net_io_bytes_sent,
-        }
+        },
+        'ram': {
+            'total': info.ram_total,
+            'free': info.ram_free,
+            'used': info.ram_used,
+            'used_percent': info.ram_used_percent,
+        },
+        'swap': {
+            'total': info.swap_total,
+            'free': info.swap_free,
+            'used': info.swap_used,
+            'used_percent': info.swap_used_percent,
+        },
+        'uptime': {
+            'for': info.up_for,
+            'since': info.up_since,
+        },
+        'platform': {
+            'system': platform['system'],
+            'processor': platform['processor'],
+            'machine': platform['machine'],
+            'pretty_name': platform['pretty_name'],
+        },
     }
    
     response = app.response_class(

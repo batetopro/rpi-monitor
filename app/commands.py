@@ -38,10 +38,16 @@ def get_usage():
         'cpu_usage': host_info.cpu_usage_percent,
         'cpu_frequency': host_info.cpu_frequency,
         'cpu_temperature': host_info.cpu_temp,
-        'ram': host_info.ram_used,
+        'current_date': host_info.current_date,
+        'disk_io_read_bytes': host_info.disk_io_read_bytes,
+        'disk_io_write_bytes': host_info.disk_io_write_bytes,
         'disk_space_available': host_info.disk_space_available,
         'disk_space_used': host_info.disk_space_used,
-        'current_date': host_info.current_date,
+        'net_io_bytes_recv': host_info.net_io_bytes_recv,
+        'net_io_bytes_sent': host_info.net_io_bytes_sent,
+        'ram': host_info.ram_used,
+        'swap_used': host_info.swap_used,
+        'swap_total': host_info.swap_total,
     }
 
     print(json.dumps(data))
