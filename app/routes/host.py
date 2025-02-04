@@ -3,6 +3,7 @@ from flask import json, render_template
 
 from app import app, auth
 from app.info.host import HostInfo
+from app.info.network_packets import NetworkPacketsInfo
 
 
 @app.route('/')
@@ -16,6 +17,7 @@ def host():
 def host_info():
     info = HostInfo()
     platform = info.read_platform()
+    network_packets_info = NetworkPacketsInfo()
 
     data = {
         'hostname': info.hostname,
@@ -49,6 +51,10 @@ def host_info():
             'available': info.disk_space_available,
             'used': info.disk_space_used,
             'total':  info.disk_space_total,
+        },
+        'network': {
+            'received': network_packets_info.total_recevied_bytes,
+            'transmitted': network_packets_info.total_transmitted_bytes,
         }
     }
    

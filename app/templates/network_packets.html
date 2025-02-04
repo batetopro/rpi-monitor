@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">&gt;&gt; cat /proc/net/dev</h4>
+    </div>
+    <div class="card-body" id="packets-info">
+        <h4>Loading ...</h4>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
+
+<script type="text/javascript">
+    var recv_columns = ["bytes", "packets", "errs", "drop", "fifo", "frame", "compressed", "multicast"],
+        trans_columns = ["bytes", "packets", "errs", "drop", "fifo", "compressed"];
+    
+    $.getJSON('/network-packets/info/', {}, function(resp){
+        var table = '<table class="table">';
+        table += '<tr>';
+        table += '<th rowspan="2">Interface</th>';
+        table += '<th colspan="8" class="text-center">Received</th>';
+        table += '<th colspan="6" class="text-center">Transmitted</th>';
+        table += '</tr>';
+        table += '<tr>';
+        for(let i = 0; i < recv_columns.length; i++){
+            table += '<th>' + recv_columns[i] + '</th>';
+        }
+        
+        for(let i = 0; i < trans_columns.length; i++){
+            table += '<th>' + trans_columns[i] + '</th>';
+        }
+        table += '</tr>';
+
+        Object.keys(resp).forEach(function(face) {
+            table += '<tr><th>' + face + '</th>';
+            
+            for(let i = 0; i < recv_columns.length; i++){
+                table += '<td>' + resp[face]['recv_' + recv_columns[i]] + '</td>';
+            }
+            
+            for(let i = 0; i < trans_columns.length; i++){
+                table += '<td>' + resp[face]['trans_' + trans_columns[i]] + '</td>';
+            }
+
+            table += '</tr>';
+        });
+
+        table += '</table>';
+
+        $('#packets-info').html(table)
+    });
+</script>
+
+{% endblock %}

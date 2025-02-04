@@ -67,6 +67,12 @@ def register_sidebar():
                     'url': url_for('ipa'),
                     'icon': 'bi bi-hdd-network',
                 },
+                {
+                    'name': 'network_packets',
+                    'title': 'Packets',
+                    'url': url_for('network_packets'),
+                    'icon': 'bi bi-box',
+                },
             ],
         },
     ]

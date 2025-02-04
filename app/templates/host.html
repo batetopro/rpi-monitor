@@ -7,6 +7,66 @@
     {% raw %}
     <script type="template/handlebars" id="host-info-template">
         <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-cpu"></i>
+                            Resources
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-center m-0"><strong>CPU</strong></p>
+                        <div class="progress-group">
+                          Usage
+                          <span class="float-end"><b>{{ cpu.usage }}</b>/100 %</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ cpu.usage_progressbar }}" style="width: {{ cpu.usage }}%"></div>
+                          </div>
+                        </div>
+                        <div class="progress-group">
+                          Frequency
+                          <span class="float-end"><b>{{ cpu.frequency }}</b>/{{ cpu.max_frequency }} GHz</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar text-bg-primary" style="width: {{ cpu.frequency_percent }}%"></div>
+                          </div>
+                        </div>
+                        <div class="progress-group">
+                          Temperature
+                          <span class="float-end"><b>{{ cpu.temperature }}</b> C</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar text-bg-primary {{ cpu.temperature_progressbar }}" style="width: {{ cpu.temperature }}%" aria-valuenow="{{ cpu.temperature }}" aria-valuemin="0" aria-valuemax="100" ></div>
+                          </div>
+                        </div>
+                        <p class="text-center m-0"><strong>RAM</strong></p>
+                        <div class="progress-group">
+                          Usage
+                          <span class="float-end"><b>{{ ram.used }}</b>/{{ ram.total }} MB</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ ram.progressbar }}" style="width: {{ ram.used_percent }}%"></div>
+                          </div>
+                        </div>
+                        <p class="text-center m-0"><strong>Used disk</strong></p>
+                        <div class="progress-group">
+                          Usage
+                          <span class="float-end"><b>{{ disk_space.show_used }}</b>/{{ disk_space.show_total }} GBi</span>
+                          <div class="progress progress-sm">
+                            <div class="progress-bar {{ disk_space.progressbar }}" style="width: {{ disk_space.used_percent }}%"></div>
+                          </div>
+                        </div>
+                        <p class="text-center m-0"><strong>Network</strong></p>
+                        <div class="progress-group">
+                          Received
+                          <span class="float-end"><b>{{ network.show_received }}</b> GBi</span>
+                        </div>
+                        <div class="progress-group">
+                          Transmitted
+                          <span class="float-end"><b>{{ network.show_transmitted }}</b> GBi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
@@ -15,9 +75,6 @@
                             Host Info
                         </h3>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-tool" id="host-info-refresh">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </button>
                         </div>
                     </div>
                     <div class="card-body p-0">
@@ -52,62 +109,10 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="card-footer">
-                        Un-check auto refresh
-                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">
-                            <i class="bi bi-cpu"></i>
-                            Resources
-                        </h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="text-center"><strong>CPU</strong></p>
-                        <div class="progress-group">
-                          Usage
-                          <span class="float-end"><b>{{ cpu.usage }}</b>/100 %</span>
-                          <div class="progress progress-sm">
-                            <div class="progress-bar {{ cpu.usage_progressbar }}" style="width: {{ cpu.usage }}%"></div>
-                          </div>
-                        </div>
-                        <div class="progress-group">
-                          Frequency
-                          <span class="float-end"><b>{{ cpu.frequency }}</b>/{{ cpu.max_frequency }} GHz</span>
-                          <div class="progress progress-sm">
-                            <div class="progress-bar text-bg-primary" style="width: {{ cpu.frequency_percent }}%"></div>
-                          </div>
-                        </div>
-                        <div class="progress-group">
-                          Temperature
-                          <span class="float-end"><b>{{ cpu.temperature }}</b> C</span>
-                          <div class="progress progress-sm">
-                            <div class="progress-bar text-bg-primary {{ cpu.temperature_progressbar }}" style="width: {{ cpu.temperature }}%" aria-valuenow="{{ cpu.temperature }}" aria-valuemin="0" aria-valuemax="100" ></div>
-                          </div>
-                        </div>
-                        <p class="text-center"><strong>RAM</strong></p>
-                        <div class="progress-group">
-                          Usage
-                          <span class="float-end"><b>{{ ram.used }}</b>/{{ ram.total }} MB</span>
-                          <div class="progress progress-sm">
-                            <div class="progress-bar {{ ram.progressbar }}" style="width: {{ ram.used_percent }}%"></div>
-                          </div>
-                        </div>
-                        <p class="text-center"><strong>Used disk</strong></p>
-                        <div class="progress-group">
-                          Usage
-                          <span class="float-end"><b>{{ disk_space.show_used }}</b>/{{ disk_space.show_total }} GBi</span>
-                          <div class="progress progress-sm">
-                            <div class="progress-bar {{ disk_space.progressbar }}" style="width: {{ disk_space.used_percent }}%"></div>
-                          </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
+                
+            
+                
                 <p>
                     Current date: <strong>{{ current_date }}</strong>
                     <br />
@@ -171,6 +176,9 @@
             } else {
                 resp.disk_space.progressbar = 'text-bg-success';
             }
+            
+            resp.network.show_received = (resp.network.received / (1024 * 1024)).toFixed(2)
+            resp.network.show_transmitted = (resp.network.transmitted / (1024 * 1024)).toFixed(2)
 
             $("#host-info").html(
                 template(resp)
