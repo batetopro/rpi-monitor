@@ -1,6 +1,7 @@
+import datetime
 import os
-import platform
 import re
+import socket
 import subprocess
 
 
@@ -194,27 +195,13 @@ class HostInfo:
         self._disk_space_used = used
 
     def read_hostname(self):
-        with open("/etc/hostname", "r") as f:
-            return f.read().strip()
+        return socket.gethostname()
 
     def read_model(self):
         return os.popen("/bin/cat /sys/firmware/devicetree/base/model").read().rstrip('\0').strip()
 
     def read_number_of_cpus(self):
         return int(os.popen('nproc').read().strip())
-
-    def read_platform(self):
-        info = platform.freedesktop_os_release()
-
-        return {
-            'system': platform.system(),
-            'processor': platform.processor(),
-            'platform': platform.platform(),
-            'machine': platform.machine(),
-            'release': platform.release(),
-            'pretty_name': info['PRETTY_NAME'],
-            # 'version': platform.version(),
-        }        
 
     def read_ram_free(self):
         return round(
@@ -240,4 +227,7 @@ class HostInfo:
         return os.popen("/usr/bin/uptime -p").read().strip()
     
     def read_up_since(self):
-        return os.popen("/usr/bin/uptime -s").read().strip()
+        return datetime.datetime.strptime(
+            os.popen("/usr/bin/uptime -s").read().strip(),
+            '%Y-%m-%d %H:%M:%S'
+        ).timestamp()

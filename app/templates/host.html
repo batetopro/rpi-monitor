@@ -26,7 +26,7 @@
                         </div>
                         <div class="progress-group">
                           Frequency
-                          <span class="float-end"><b>{{ cpu.frequency }}</b>/{{ cpu.max_frequency }} GHz</span>
+                          <span class="float-end"><b>{{ cpu.show_freq }}</b>/{{ cpu.show_max_freq }} GHz</span>
                           <div class="progress progress-sm">
                             <div class="progress-bar text-bg-primary" style="width: {{ cpu.frequency_percent }}%"></div>
                           </div>
@@ -41,17 +41,25 @@
                         <p class="text-center m-0"><strong>RAM</strong></p>
                         <div class="progress-group">
                           Usage
-                          <span class="float-end"><b>{{ ram.used }}</b>/{{ ram.total }} MB</span>
+                          <span class="float-end"><b>{{ ram.show_used }}</b>/{{ ram.show_total }} MB</span>
                           <div class="progress progress-sm">
                             <div class="progress-bar {{ ram.progressbar }}" style="width: {{ ram.used_percent }}%"></div>
                           </div>
                         </div>
-                        <p class="text-center m-0"><strong>Used disk</strong></p>
+                        <p class="text-center m-0"><strong>Disk</strong></p>
                         <div class="progress-group">
-                          Usage
+                          Used space
                           <span class="float-end"><b>{{ disk_space.show_used }}</b>/{{ disk_space.show_total }} GBi</span>
                           <div class="progress progress-sm">
                             <div class="progress-bar {{ disk_space.progressbar }}" style="width: {{ disk_space.used_percent }}%"></div>
+                          </div>
+                          <div class="progress-group">
+                            Read
+                            <span class="float-end"><b>{{ disk_io.read_gb }}</b> GBi</span>
+                          </div>
+                          <div class="progress-group">
+                            Write
+                            <span class="float-end"><b>{{ disk_io.write_gb }}</b> GBi</span>
                           </div>
                         </div>
                         <p class="text-center m-0"><strong>Network</strong></p>
@@ -117,8 +125,6 @@
                     Current date: <strong>{{ current_date }}</strong>
                     <br />
                     Uptime: <strong>{{uptime.since}}</strong> - <strong>{{uptime.for}}</strong>
-                    <br />
-                    CPU idle: <strong>{{uptime.idle}}%</strong>
                 </p>
             </div>
         </div>
@@ -139,6 +145,9 @@
 
     function show_host_info(){
         $.getJSON('/host/info/', {}, function(resp){
+            
+            resp.cpu.show_freq = (resp.cpu.frequency / 1000).toFixed(2)
+            resp.cpu.show_max_freq = (resp.cpu.max_frequency / 1000).toFixed(2)
             resp.cpu.frequency_percent = (resp.cpu.frequency / resp.cpu.max_frequency) * 100;
 
             if (resp.cpu.usage >= 85){
@@ -156,7 +165,9 @@
             } else {
                 resp.cpu.temperature_progressbar = 'text-bg-success';
             }
-
+            
+            resp.ram.show_used = (resp.ram.used / (1024 * 1024)).toFixed(2)
+            resp.ram.show_total = (resp.ram.total / (1024 * 1024)).toFixed(2)
             if (resp.ram.used_percent >= 85){
                 resp.ram.progressbar = 'text-bg-danger';
             } else if (resp.ram.used_percent >= 70){
@@ -166,8 +177,10 @@
             }
             
             resp.disk_space.used_percent = (resp.disk_space.used / resp.disk_space.total) * 100;
-            resp.disk_space.show_used = (resp.disk_space.used / (1024 * 1024)).toFixed(2)
-            resp.disk_space.show_total = (resp.disk_space.total / (1024 * 1024)).toFixed(2)
+            resp.disk_space.show_used = (resp.disk_space.used / (1024 * 1024 * 1024)).toFixed(2)
+            resp.disk_space.show_total = (resp.disk_space.total / (1024 * 1024 * 1024)).toFixed(2)
+            resp.disk_io.read_gb = (resp.disk_io.read_bytes / (1024 * 1024 * 1024)).toFixed(2)
+            resp.disk_io.write_gb = (resp.disk_io.write_bytes / (1024 * 1024 * 1024)).toFixed(2)
 
             if (resp.ram.used_percent >= 85){
                 resp.disk_space.progressbar = 'text-bg-danger';
@@ -177,8 +190,8 @@
                 resp.disk_space.progressbar = 'text-bg-success';
             }
             
-            resp.network.show_received = (resp.network.received / (1024 * 1024)).toFixed(2)
-            resp.network.show_transmitted = (resp.network.transmitted / (1024 * 1024)).toFixed(2)
+            resp.network.show_received = (resp.network.received / (1024 * 1024 * 1024)).toFixed(2)
+            resp.network.show_transmitted = (resp.network.transmitted / (1024 * 1024 * 1024)).toFixed(2)
 
             $("#host-info").html(
                 template(resp)

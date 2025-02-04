@@ -4,12 +4,14 @@ import json
 
 from app import app
 from app.info.host import HostInfo
+from app.info.platform_info import PlatformInfo
+from app.info.psutil_info import PsutilHostInfo
 
 
 @app.cli.command("host")
 def get_host():
-    host_info = HostInfo()
-    platform_info = host_info.read_platform()
+    host_info = PsutilHostInfo()
+    platform_info = PlatformInfo.read()
 
     data = {
         'hostname': host_info.hostname,

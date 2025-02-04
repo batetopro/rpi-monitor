@@ -2,8 +2,8 @@ from flask import json, render_template
 
 
 from app import app, auth
-from app.info.host import HostInfo
-from app.info.network_packets import NetworkPacketsInfo
+from app.info.platform_info import PlatformInfo
+from app.info.psutil_info import PsutilHostInfo
 
 
 @app.route('/')
@@ -15,9 +15,8 @@ def host():
 @app.route('/host/info/')
 @auth.login_required
 def host_info():
-    info = HostInfo()
-    platform = info.read_platform()
-    network_packets_info = NetworkPacketsInfo()
+    info = PsutilHostInfo()
+    platform = PlatformInfo.read()
 
     data = {
         'hostname': info.hostname,
@@ -39,7 +38,6 @@ def host_info():
         'uptime': {
             'for': info.up_for,
             'since': info.up_since,
-            'idle': info.cpu_idle,
         },
         'platform': {
             'system': platform['system'],
@@ -47,14 +45,18 @@ def host_info():
             'machine': platform['machine'],
             'pretty_name': platform['pretty_name'],
         },
+        'disk_io': {
+            'read_bytes': info.disk_io_read_bytes,
+            'write_bytes': info.disk_io_write_bytes,
+        },
         'disk_space': {
             'available': info.disk_space_available,
             'used': info.disk_space_used,
             'total':  info.disk_space_total,
         },
         'network': {
-            'received': network_packets_info.total_recevied_bytes,
-            'transmitted': network_packets_info.total_transmitted_bytes,
+            'received': info.net_io_bytes_recv,
+            'transmitted': info.net_io_bytes_sent,
         }
     }
    
