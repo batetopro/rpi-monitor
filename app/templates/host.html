@@ -125,14 +125,32 @@
                         </table>
                     </div>
                 </div>
-                
-            
-                
-                <p>
-                    Current date: <strong>{{ current_date }}</strong>
-                    <br />
-                    Uptime: <strong>{{uptime.since}}</strong> - <strong>{{uptime.for}}</strong>
-                </p>
+                <div class="card mt-2">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="bi bi-clock"></i>
+                            Clock
+                        </h3>
+                        <div class="card-tools">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table">
+                            <tr>
+                                <th>Time on host</th>
+                                <td>{{ current_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Last boot on</th>
+                                <td>{{ uptime.since }}</td>
+                            </tr>
+                            <tr>
+                                <th>Uptime</th>
+                                <td>{{ uptime.for }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
@@ -144,7 +162,8 @@
 {% block js %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.7.1.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/handlebars.min.js') }}"></script>
-
+<script type="text/javascript" src="{{ url_for('static', filename='js/moment.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/moment-duration-format.js') }}"></script>
 
 <script type="text/javascript">
     var template = Handlebars.compile($("#host-info-template").html()),
@@ -209,18 +228,20 @@
 
             resp.network.show_received = (resp.network.received / (1024 * 1024 * 1024)).toFixed(2)
             resp.network.show_transmitted = (resp.network.transmitted / (1024 * 1024 * 1024)).toFixed(2)
+            
+            resp.current_date = moment.unix(resp.current_date).format('YYYY-MM-DD HH:MM:ss');
+            resp.uptime.since = moment.unix(resp.uptime.since).format('YYYY-MM-DD HH:MM:ss');
+            resp.uptime.for = moment.duration(resp.uptime.for, "seconds").format('hh:mm:ss');
+
+            console.log(resp.uptime.for);
 
             $("#host-info").html(
                 template(resp)
             );
 
-            $('#host-info-refresh').on('click', function(){
-                show_host_info();
-            });
-
             refresh_timeout = setTimeout(function(){
                 show_host_info();
-            }, 5000);
+            }, 1000);
         });
     }
 
