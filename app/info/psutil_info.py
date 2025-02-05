@@ -195,6 +195,11 @@ class PsutilHostInfo:
         self._disk_space_available = usage.free
         self._disk_space_used = usage.used
 
+        for partition in psutil.disk_partitions():
+            usage = psutil.disk_usage(partition.mountpoint)
+            self._disk_space_available += usage.free
+            self._disk_space_used += usage.used
+
     def read_hostname(self):
         return socket.gethostname()
 
