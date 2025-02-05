@@ -191,9 +191,9 @@ class PsutilHostInfo:
         return float(os.popen('date +%s').read().strip())
 
     def read_disk_space(self):
-        usage = psutil.disk_usage('/')
-        self._disk_space_available = usage.free
-        self._disk_space_used = usage.used
+        # usage = psutil.disk_usage('/')
+        self._disk_space_available = 0
+        self._disk_space_used = 0
 
         for partition in psutil.disk_partitions():
             usage = psutil.disk_usage(partition.mountpoint)
