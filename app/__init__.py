@@ -30,9 +30,6 @@ if not app.debug:
     file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
 
-    app.logger.setLevel(logging.INFO)
-    app.logger.info('RPi monitor startup')
-
 
 @auth.verify_password
 def verify_password(username, password):
