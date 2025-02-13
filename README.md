@@ -72,7 +72,7 @@ sudo apt-get install nginx
 
 Create Nginx configration file `/etc/nginx/conf.d/rpi-monitor.conf`
 
-'''
+```
 server {
    listen 80;
 
@@ -87,9 +87,9 @@ server {
      proxy_pass http://127.0.0.1:5000/;  # Change 5000 to the port set in systemctl config
    }
 }
-'''
+```
 
 Restart Nginx
 ```
-sudo systemctl restart nginx
+sudo systemctl reload nginx
 ```

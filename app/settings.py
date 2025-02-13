@@ -4,7 +4,6 @@ import os
 from werkzeug.security import generate_password_hash
 
 
-
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -15,4 +14,3 @@ users = {
 
 class Settings(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-    

@@ -1,7 +1,3 @@
-import os
-
-
-from app.settings import basedir
 
 
 class NetworkPacketsInfo:
@@ -37,7 +33,7 @@ class NetworkPacketsInfo:
             lines = fp.readlines()
 
         columnLine = lines[1]
-        _, receiveCols , transmitCols = columnLine.split("|")
+        _, receiveCols, transmitCols = columnLine.split("|")
 
         receiveCols = ["recv_" + a for a in receiveCols.split()]
         transmitCols = ["trans_" + a for a in transmitCols.split()]
@@ -45,11 +41,11 @@ class NetworkPacketsInfo:
 
         faces = {}
         for line in lines[2:]:
-            if line.find(":") < 0: continue
+            if line.find(":") < 0:
+                continue
             face, data = line.split(":")
             face = face.strip()
             faceData = dict(zip(cols, [int(e) for e in data.split()]))
             faces[face] = faceData
 
         return faces
-        
