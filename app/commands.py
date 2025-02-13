@@ -1,9 +1,7 @@
-import datetime
 import json
 
 
 from app import app
-from app.info.host import HostInfo
 from app.info.platform_info import PlatformInfo
 from app.info.psutil_info import PsutilHostInfo
 
@@ -43,6 +41,7 @@ def get_usage():
         'disk_io_write_bytes': host_info.disk_io_write_bytes,
         'disk_space_available': host_info.disk_space_available,
         'disk_space_used': host_info.disk_space_used,
+        'net_interfaces': host_info.net_interfaces,
         'net_io_bytes_recv': host_info.net_io_bytes_recv,
         'net_io_bytes_sent': host_info.net_io_bytes_sent,
         'ram': host_info.ram_used,

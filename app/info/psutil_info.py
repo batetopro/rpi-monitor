@@ -69,7 +69,7 @@ class PsutilHostInfo:
         if self._disk_space_available is None:
             self.read_disk_space()
         return self._disk_space_available
-    
+
     @property
     def disk_space_total(self):
         return self.disk_space_available + self.disk_space_used
@@ -91,6 +91,37 @@ class PsutilHostInfo:
         if self._model is None:
             self._model = self.read_model()
         return self._model
+
+    @property
+    def net_interfaces(self):
+        interfaces = []
+
+        for name, addresses in psutil.net_if_addrs().items():
+            info = {
+                'name': name,
+                'ip4_address': None,
+                'ip6_address': None,
+                'addresses': []
+            }
+
+            for address in addresses:
+                info['addresses'].append({
+                    'family': address.family.name,
+                    'address': address.address,
+                    'netmask': address.netmask,
+                    'broadcast': address.broadcast,
+                    'ptp': address.ptp,
+                })
+
+                if address.family.name == 'AF_INET':
+                    info['ip4_address'] = address.address
+
+                if address.family.name == 'AF_INET6':
+                    info['ip6_address'] = address.address
+
+            interfaces.append(info)
+
+        return interfaces
 
     @property
     def net_io_bytes_recv(self):
@@ -184,7 +215,7 @@ class PsutilHostInfo:
         try:
             data = psutil.sensors_temperatures()
             return data['cpu_thermal'][0].current
-        except Exception as ex:
+        except Exception:
             return None
 
     def read_current_date(self):
