@@ -36,7 +36,7 @@ def get_usage():
     for partition in host_info.disk_partitions:
         dev = os.path.basename(partition['device'])
         if dev in host_info.disk_io_counters:
-            counters = host_info.disk_io_counters
+            counters = host_info.disk_io_counters[dev]
             partition['io_read_bytes'] = counters.read_bytes
             partition['io_read_count'] = counters.read_count
             partition['io_read_time'] = counters.read_time
