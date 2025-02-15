@@ -255,6 +255,12 @@ class PsutilHostInfo:
                 'space_available': usage.free,
                 'space_total': usage.total,
                 'space_used': usage.used,
+                'io_read_bytes': None,
+                'io_read_count': None,
+                'io_read_time': None,
+                'io_write_count': None,
+                'io_write_bytes': None,
+                'io_write_time': None,
             })
             self._disk_space_available += usage.free
             self._disk_space_total += usage.total

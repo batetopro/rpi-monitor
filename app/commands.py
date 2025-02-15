@@ -1,3 +1,4 @@
+import os
 import json
 
 
@@ -32,12 +33,22 @@ def get_host():
 def get_usage():
     host_info = PsutilHostInfo()
 
+    for partition in host_info.disk_partitions:
+        dev = os.path.basename(partition['device'])
+        if dev in host_info.disk_io_counters:
+            counters = host_info.disk_io_counters
+            partition['io_read_bytes'] = counters.read_bytes
+            partition['io_read_count'] = counters.read_count
+            partition['io_read_time'] = counters.read_time
+            partition['io_write_count'] = counters.write_count
+            partition['io_write_bytes'] = counters.write_bytes
+            partition['io_write_time'] = counters.write_time
+
     data = {
         'cpu_usage': host_info.cpu_usage_percent,
         'cpu_frequency': host_info.cpu_frequency,
         'cpu_temperature': host_info.cpu_temp,
         'current_date': host_info.current_date,
-        'disk_io_counters': host_info.disk_io_counters,
         'disk_io_read_bytes': host_info.disk_io_read_bytes,
         'disk_io_write_bytes': host_info.disk_io_write_bytes,
         'disk_space_available': host_info.disk_space_available,
