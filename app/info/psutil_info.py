@@ -65,6 +65,12 @@ class PsutilHostInfo:
         return self._disk_io_counters.write_bytes
 
     @property
+    def disk_partitions(self):
+        if self._disk_partitions is None:
+            self.read_disk_space()
+        return self._disk_partitions
+
+    @property
     def disk_space_available(self):
         if self._disk_space_available is None:
             self.read_disk_space()
@@ -72,7 +78,9 @@ class PsutilHostInfo:
 
     @property
     def disk_space_total(self):
-        return self.disk_space_available + self.disk_space_used
+        if self._disk_space_total is None:
+            self.read_disk_space()
+        return self._disk_space_total
 
     @property
     def disk_space_used(self):
@@ -202,7 +210,9 @@ class PsutilHostInfo:
         self._cpu_usage_percent = None
         self._hostname = None
         self._disk_io_counters = None
+        self._disk_partitions = None
         self._disk_space_available = None
+        self._disk_space_total = None
         self._disk_space_used = None
         self._model = None
         self._net_io_counters = None
@@ -222,13 +232,24 @@ class PsutilHostInfo:
         return float(os.popen('date +%s').read().strip())
 
     def read_disk_space(self):
-        # usage = psutil.disk_usage('/')
+        self._disk_partitions = []
         self._disk_space_available = 0
+        self._disk_space_total = 0
         self._disk_space_used = 0
 
         for partition in psutil.disk_partitions():
             usage = psutil.disk_usage(partition.mountpoint)
+            self._disk_partitions.append({
+                'device': partition.device,
+                'mountpoint': partition.mountpoint,
+                'fstype': partition.fstype,
+                'opts': partition.opts,
+                'space_available': usage.free,
+                'space_total': usage.total,
+                'space_used': usage.used,
+            })
             self._disk_space_available += usage.free
+            self._disk_space_total += usage.total
             self._disk_space_used += usage.used
 
     def read_hostname(self):

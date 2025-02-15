@@ -41,6 +41,8 @@ def get_usage():
         'disk_io_write_bytes': host_info.disk_io_write_bytes,
         'disk_space_available': host_info.disk_space_available,
         'disk_space_used': host_info.disk_space_used,
+        'disk_sapce_total': host_info.disk_space_total,
+        'disk_partitions': host_info.disk_partitions,
         'net_interfaces': host_info.net_interfaces,
         'net_io_bytes_recv': host_info.net_io_bytes_recv,
         'net_io_bytes_sent': host_info.net_io_bytes_sent,
