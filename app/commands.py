@@ -22,8 +22,20 @@ def get_host():
         'platform': platform_info['platform'],
         'up_since': host_info.up_since,
         'max_cpu_frequency': host_info.cpu_max_frequency,
+        'net_interfaces': host_info.net_interfaces,
         'total_ram': host_info.ram_total,
         'number_of_cpus': host_info.number_of_cpus,
+    }
+
+    print(json.dumps(data))
+
+
+@app.cli.command("net_interfaces")
+def get_net_interfaces():
+    host_info = PsutilHostInfo()
+
+    data = {
+        'net_interfaces': host_info.net_interfaces,
     }
 
     print(json.dumps(data))
@@ -55,7 +67,6 @@ def get_usage():
         'disk_space_used': host_info.disk_space_used,
         'disk_space_total': host_info.disk_space_total,
         'disk_partitions': host_info.disk_partitions,
-        'net_interfaces': host_info.net_interfaces,
         'net_io_bytes_recv': host_info.net_io_bytes_recv,
         'net_io_bytes_sent': host_info.net_io_bytes_sent,
         'ram': host_info.ram_used,
