@@ -53,16 +53,24 @@ class PsutilHostInfo:
         return self.read_current_date()
 
     @property
-    def disk_io_read_bytes(self):
+    def disk_io_counters(self):
         if self._disk_io_counters is None:
-            self._disk_io_counters = psutil.disk_io_counters()
-        return self._disk_io_counters.read_bytes
+            self._disk_io_counters = psutil.disk_io_counters(perdisk=True)
+        return self._disk_io_counters
+
+    @property
+    def disk_io_read_bytes(self):
+        result = 0
+        for _, counters in self.disk_io_counters.items():
+            result += counters.read_bytes
+        return result
 
     @property
     def disk_io_write_bytes(self):
-        if self._disk_io_counters is None:
-            self._disk_io_counters = psutil.disk_io_counters()
-        return self._disk_io_counters.write_bytes
+        result = 0
+        for _, counters in self.disk_io_counters.items():
+            result += counters.write_bytes
+        return result
 
     @property
     def disk_partitions(self):

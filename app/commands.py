@@ -37,6 +37,7 @@ def get_usage():
         'cpu_frequency': host_info.cpu_frequency,
         'cpu_temperature': host_info.cpu_temp,
         'current_date': host_info.current_date,
+        'disk_io_counters': host_info.disk_io_counters,
         'disk_io_read_bytes': host_info.disk_io_read_bytes,
         'disk_io_write_bytes': host_info.disk_io_write_bytes,
         'disk_space_available': host_info.disk_space_available,
