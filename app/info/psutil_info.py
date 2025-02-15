@@ -1,4 +1,4 @@
-import os
+import datetime
 import socket
 
 
@@ -237,7 +237,7 @@ class PsutilHostInfo:
             return None
 
     def read_current_date(self):
-        return float(os.popen('date +%s').read().strip())
+        return datetime.datetime.now(tz=datetime.timezone.utc).timestamp()
 
     def read_disk_space(self):
         self._disk_partitions = []
@@ -275,9 +275,6 @@ class PsutilHostInfo:
                 return fp.read().rstrip('\0').strip()
         except Exception:
             return None
-
-    def read_number_of_cpus(self):
-        return int(os.popen('nproc').read().strip())
 
     def read_up_for(self):
         return self.current_date - self.up_since

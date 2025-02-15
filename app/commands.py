@@ -44,6 +44,7 @@ def get_net_interfaces():
 @app.cli.command("usage")
 def get_usage():
     host_info = PsutilHostInfo()
+    current_date = host_info.current_date
 
     for partition in host_info.disk_partitions:
         dev = os.path.basename(partition['device'])
@@ -60,7 +61,7 @@ def get_usage():
         'cpu_usage': host_info.cpu_usage_percent,
         'cpu_frequency': host_info.cpu_frequency,
         'cpu_temperature': host_info.cpu_temp,
-        'current_date': host_info.current_date,
+        'current_date': current_date,
         'disk_io_read_bytes': host_info.disk_io_read_bytes,
         'disk_io_write_bytes': host_info.disk_io_write_bytes,
         'disk_space_available': host_info.disk_space_available,
