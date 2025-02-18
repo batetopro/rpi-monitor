@@ -34,6 +34,12 @@ def get_net_interfaces():
     print(json.dumps(data))
 
 
+@app.cli.command("platform")
+def get_platform():
+    data = reports['platform']()
+    print(json.dumps(data))
+
+
 @app.cli.command("usage")
 def get_usage():
     data = reports['usage']()

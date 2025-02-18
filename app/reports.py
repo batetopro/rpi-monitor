@@ -14,19 +14,12 @@ def cpu_percent():
 
 def host():
     host_info = PsutilHostInfo()
-    platform_info = PlatformInfo.read()
 
     data = {
         'hostname': host_info.hostname,
-        'model': host_info.model,
-        'os_name': platform_info['pretty_name'],
-        'system': platform_info['system'],
-        'machine': platform_info['machine'],
-        'processor': platform_info['processor'],
-        'platform': platform_info['platform'],
         'up_since': host_info.up_since,
+        'min_cpu_frequency': host_info.cpu_min_frequency,
         'max_cpu_frequency': host_info.cpu_max_frequency,
-        'net_interfaces': host_info.net_interfaces,
         'total_ram': host_info.ram_total,
         'number_of_cpus': host_info.number_of_cpus,
     }

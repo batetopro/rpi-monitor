@@ -19,6 +19,12 @@ class PsutilHostInfo:
         return self._cpu_times.idle
 
     @property
+    def cpu_min_frequency(self):
+        if self._cpu_freq is None:
+            self._cpu_freq = psutil.cpu_freq()
+        return self._cpu_freq.min
+
+    @property
     def cpu_max_frequency(self):
         if self._cpu_freq is None:
             self._cpu_freq = psutil.cpu_freq()
