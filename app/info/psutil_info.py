@@ -130,7 +130,7 @@ class PsutilHostInfo:
                 'ip6_address': None,
                 'isup': None,
                 'duplex': psutil.NIC_DUPLEX_UNKNOWN,
-                'spped': None,
+                'speed': None,
                 'mtu': None,
                 'addresses': []
             }
@@ -139,7 +139,7 @@ class PsutilHostInfo:
                 stat = stats[name]
                 info['isup'] = stat.isup
                 info['duplex'] = stat.duplex
-                info['spped'] = stat.speed
+                info['speed'] = stat.speed
                 info['mtu'] = stat.mtu
 
             for address in addresses:
