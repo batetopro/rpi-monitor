@@ -41,6 +41,22 @@ def net_interfaces():
     }
 
 
+def platform():
+    host_info = PsutilHostInfo()
+    platform_info = PlatformInfo.read()
+
+    data = {
+        'model': host_info.model,
+        'os_name': platform_info['pretty_name'],
+        'system': platform_info['system'],
+        'machine': platform_info['machine'],
+        'processor': platform_info['processor'],
+        'platform': platform_info['platform'],
+    }
+
+    return data
+
+
 def usage():
     host_info = PsutilHostInfo()
     current_date = host_info.current_date
@@ -79,5 +95,6 @@ reports = {
     'cpu_percent': cpu_percent,
     'host': host,
     'net_interfaces': net_interfaces,
+    'platform': platform,
     'usage': usage,
 }
