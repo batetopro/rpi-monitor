@@ -44,7 +44,7 @@ class PsutilHostInfo:
 
     @property
     def cpu_usage_per_cpu(self):
-        return psutil.cpu_percent(True)
+        return psutil.cpu_percent(interval=1, percpu=True)
 
     @property
     def cpu_user(self):
