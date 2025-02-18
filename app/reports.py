@@ -76,6 +76,7 @@ def usage():
 
 
 reports = {
+    'cpu_percent': cpu_percent,
     'host': host,
     'net_interfaces': net_interfaces,
     'usage': usage,
