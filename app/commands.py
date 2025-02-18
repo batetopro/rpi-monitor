@@ -9,7 +9,7 @@ from app.reports import reports
 @app.cli.command("chat")
 def chat():
     while 1:
-        query = sys.stdin.readline()
+        query = sys.stdin.readline().strip()
         if query == 'quit':
             break
 
