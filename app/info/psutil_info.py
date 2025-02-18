@@ -43,6 +43,10 @@ class PsutilHostInfo:
         return self._cpu_usage_percent
 
     @property
+    def cpu_usage_per_cpu(self):
+        return psutil.cpu_percent(True)
+
+    @property
     def cpu_user(self):
         if self._cpu_times is None:
             self._cpu_times = psutil.cpu_times()

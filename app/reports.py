@@ -5,6 +5,13 @@ from app.info.platform_info import PlatformInfo
 from app.info.psutil_info import PsutilHostInfo
 
 
+def cpu_percent():
+    host_info = PsutilHostInfo()
+    return {
+        'cpu_usage': host_info.cpu_usage_per_cpu
+    }
+
+
 def host():
     host_info = PsutilHostInfo()
     platform_info = PlatformInfo.read()
