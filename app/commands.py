@@ -42,5 +42,5 @@ def get_platform():
 
 @app.cli.command("usage")
 def get_usage():
-    data = reports['usage']()
+    data = reports['runtime']()
     print(json.dumps(data))

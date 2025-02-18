@@ -50,7 +50,7 @@ def platform():
     return data
 
 
-def usage():
+def runtime():
     host_info = PsutilHostInfo()
     current_date = host_info.current_date
 
@@ -89,5 +89,5 @@ reports = {
     'host': host,
     'net_interfaces': net_interfaces,
     'platform': platform,
-    'usage': usage,
+    'runtime': runtime,
 }
