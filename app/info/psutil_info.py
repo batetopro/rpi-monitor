@@ -122,13 +122,25 @@ class PsutilHostInfo:
     def net_interfaces(self):
         interfaces = []
 
+        stats = psutil.net_if_stats()
         for name, addresses in psutil.net_if_addrs().items():
             info = {
                 'name': name,
                 'ip4_address': None,
                 'ip6_address': None,
+                'isup': None,
+                'duplex': psutil.NIC_DUPLEX_UNKNOWN,
+                'spped': None,
+                'mtu': None,
                 'addresses': []
             }
+
+            if name in stats:
+                stat = stats[name]
+                info['isup'] = stat.isup
+                info['duplex'] = stat.duplex
+                info['spped'] = stat.speed
+                info['mtu'] = stat.mtu
 
             for address in addresses:
                 info['addresses'].append({
