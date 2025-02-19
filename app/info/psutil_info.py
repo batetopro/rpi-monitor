@@ -164,21 +164,33 @@ class PsutilHostInfo:
     @property
     def net_io_counters(self):
         if self._net_io_counters is None:
-            self._net_io_counters = psutil.net_io_counters(True)
+            self._net_io_counters = dict()
+            for interface, counters in psutil.net_io_counters(True).items():
+                self._net_io_counters[interface] = {
+                    'bytes_sent': counters.bytes_sent,
+                    'bytes_recv': counters.bytes_recv,
+                    'packets_sent': counters.packets_sent,
+                    'packets_recv': counters.packets_recv,
+                    'errin': counters.errin,
+                    'errout': counters.errout,
+                    'dropin': counters.dropin,
+                    'dropout': counters.dropout,
+                }
+
         return self._net_io_counters
 
     @property
     def net_io_bytes_recv(self):
         result = 0
         for counters in self.net_io_counters.values():
-            result += counters.bytes_recv
+            result += counters['bytes_recv']
         return result
 
     @property
     def net_io_bytes_sent(self):
         result = 0
         for counters in self.net_io_counters.values():
-            result += counters.bytes_sent
+            result += counters['bytes_sent']
         return result
 
     @property
