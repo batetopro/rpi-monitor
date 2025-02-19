@@ -162,16 +162,24 @@ class PsutilHostInfo:
         return interfaces
 
     @property
-    def net_io_bytes_recv(self):
+    def net_io_counters(self):
         if self._net_io_counters is None:
-            self._net_io_counters = psutil.net_io_counters()
-        return self._net_io_counters.bytes_recv
+            self._net_io_counters = psutil.net_io_counters(True)
+        return self._net_io_counters
+
+    @property
+    def net_io_bytes_recv(self):
+        result = 0
+        for counters in self.net_io_counters.values():
+            result += counters.bytes_recv
+        return result
 
     @property
     def net_io_bytes_sent(self):
-        if self._net_io_counters is None:
-            self._net_io_counters = psutil.net_io_counters()
-        return self._net_io_counters.bytes_sent
+        result = 0
+        for counters in self.net_io_counters.values():
+            result += counters.bytes_sent
+        return result
 
     @property
     def number_of_cpus(self):

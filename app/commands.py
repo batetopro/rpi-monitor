@@ -18,7 +18,9 @@ def chat():
         else:
             data = False
 
-        sys.stdout.write(json.dumps(data))
+        message = json.dumps(data)
+        sys.stdout.write('{}\n'.format(len(message)))
+        sys.stdout.write(message)
         sys.stdout.flush()
 
 

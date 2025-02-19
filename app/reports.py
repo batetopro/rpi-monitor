@@ -78,6 +78,7 @@ def runtime():
         'disk_partitions': host_info.disk_partitions,
         'net_io_bytes_recv': host_info.net_io_bytes_recv,
         'net_io_bytes_sent': host_info.net_io_bytes_sent,
+        'net_io_counters': host_info.net_io_counters,
         'ram': host_info.ram_used,
         'swap_used': host_info.swap_used,
         'swap_total': host_info.swap_total,
