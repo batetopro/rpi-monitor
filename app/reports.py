@@ -39,6 +39,7 @@ def platform():
     platform_info = PlatformInfo.read()
 
     data = {
+        'serial_number': platform_info['serial_number'],
         'model': host_info.model,
         'os_name': platform_info['pretty_name'],
         'system': platform_info['system'],
